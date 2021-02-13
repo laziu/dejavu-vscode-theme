@@ -1,160 +1,154 @@
-const { getVariant } = require("./process");
-const { getColors } = require("./primer");
+const { palette, invert, mix } = require("./util");
 
 function getTheme({ style, name }) {
-  // Usage: `auto('pink')`
-  const auto = (hex) => getVariant(hex, style);
-
-  // Usage: `pick({ light: "lightblue", dark: "darkblue" })`
+  const colors = palette(style);
   const pick = (options) => options[style];
 
-  const primer = getColors(style);
-
-  const workbenchForeground = pick({ light: primer.gray[8], dark: primer.gray[7] });
-  const editorForeground = pick({ light: primer.gray[9], dark: primer.gray[7] });
+  const workbenchForeground = pick({ light: colors.gray[8], dark: colors.gray[7] });
+  const editorForeground = pick({ light: colors.gray[9], dark: colors.gray[7] });
 
   return {
     name: name,
     colors: {
-      focusBorder: pick({ light: primer.blue[4], dark: primer.blue[3] }),
-      foreground: pick({ light: primer.gray[7], dark: primer.gray[6] }),
-      descriptionForeground: primer.gray[5],
-      errorForeground: primer.red[6],
+      focusBorder: pick({ light: colors.blue[4], dark: colors.blue[3] }),
+      foreground: pick({ light: colors.gray[7], dark: colors.gray[6] }),
+      descriptionForeground: colors.gray[5],
+      errorForeground: colors.red[6],
 
-      "textLink.foreground": pick({ light: primer.blue[5], dark: primer.blue[6] }),
-      "textLink.activeForeground": pick({ light: primer.blue[6], dark: primer.blue[7] }),
-      "textBlockQuote.background": primer.gray[0],
-      "textBlockQuote.border": primer.gray[2],
-      "textCodeBlock.background": primer.gray[1],
-      "textPreformat.foreground": primer.gray[6],
-      "textSeparator.foreground": primer.gray[3],
+      "textLink.foreground": pick({ light: colors.blue[5], dark: colors.blue[6] }),
+      "textLink.activeForeground": pick({ light: colors.blue[6], dark: colors.blue[7] }),
+      "textBlockQuote.background": colors.white,
+      "textBlockQuote.border": colors.gray[1],
+      "textCodeBlock.background": colors.gray[0],
+      "textPreformat.foreground": colors.gray[6],
+      "textSeparator.foreground": colors.gray[2],
 
-      "button.background": pick({ light: "#159739", dark: primer.green[2] }),
-      "button.foreground": pick({ light: primer.white, dark: primer.green[8] }),
-      "button.hoverBackground": pick({ light: "#138934", dark: primer.green[3] }),
+      "button.background": pick({ light: colors.green[6], dark: colors.green[3] }),
+      "button.foreground": pick({ light: colors.white, dark: colors.green[8] }),
+      "button.hoverBackground": pick({ light: colors.green[7], dark: colors.green[2] }),
 
-      "checkbox.background": pick({ light: primer.gray[0], dark: primer.gray[2] }),
-      "checkbox.border": pick({ light: primer.gray[3], dark: primer.white }),
+      "checkbox.background": colors.gray[0],
+      "checkbox.border": pick({ light: colors.gray[3], dark: colors.white }),
 
-      "dropdown.background": pick({ light: primer.gray[0], dark: primer.gray[1] }),
-      "dropdown.border": pick({ light: primer.gray[2], dark: primer.white }),
+      "dropdown.background": colors.gray[0],
+      "dropdown.border": pick({ light: colors.gray[3], dark: colors.white }),
       "dropdown.foreground": workbenchForeground,
-      "dropdown.listBackground": pick({ light: primer.white, dark: primer.gray[0] }),
+      "dropdown.listBackground": colors.white,
 
-      "input.background": pick({ light: primer.gray[0], dark: primer.gray[1] }),
-      "input.border": pick({ light: primer.gray[2], dark: primer.white }),
+      "input.background": colors.gray[0],
+      "input.border": pick({ light: colors.gray[3], dark: colors.white }),
       "input.foreground": workbenchForeground,
-      "input.placeholderForeground": pick({ light: primer.gray[4], dark: primer.gray[5] }),
+      "input.placeholderForeground": pick({ light: colors.gray[4], dark: colors.gray[5] }),
 
-      "badge.foreground": pick({ light: primer.blue[6], dark: primer.blue[7] }),
-      "badge.background": pick({ light: primer.blue[1], dark: primer.blue[2] }),
+      "badge.foreground": pick({ light: colors.blue[6], dark: colors.blue[7] }),
+      "badge.background": pick({ light: colors.blue[1], dark: colors.blue[2] }),
 
-      "progressBar.background": primer.blue[4],
+      "progressBar.background": colors.blue[4],
 
       "titleBar.activeForeground": workbenchForeground,
-      "titleBar.activeBackground": pick({ light: primer.white, dark: primer.gray[0] }),
-      "titleBar.inactiveForeground": primer.gray[5],
-      "titleBar.inactiveBackground": pick({ light: primer.gray[1], dark: "#1f2428" }),
-      "titleBar.border": pick({ light: primer.gray[2], dark: primer.white }),
+      "titleBar.activeBackground": pick({ light: colors.white, dark: mix(colors.gray[0], "#000", 0.4) }),
+      "titleBar.inactiveForeground": colors.gray[5],
+      "titleBar.inactiveBackground": pick({ light: colors.gray[1], dark: mix(colors.gray[0], "#000", 0.3) }),
+      "titleBar.border": pick({ light: colors.gray[2], dark: colors.white }),
 
       "activityBar.foreground": workbenchForeground,
-      "activityBar.inactiveForeground": primer.gray[4],
-      "activityBar.background": pick({ light: primer.white, dark: primer.gray[0] }),
-      "activityBarBadge.foreground": pick({ light: primer.white, dark: primer.black }),
-      "activityBarBadge.background": pick({ light: primer.blue[4], dark: primer.blue[4] }),
+      "activityBar.inactiveForeground": colors.gray[4],
+      "activityBar.background": pick({ light: colors.white, dark: mix(colors.gray[0], "#000", 0.4) }),
+      "activityBarBadge.foreground": pick({ light: colors.white, dark: colors.black }),
+      "activityBarBadge.background": colors.blue[4],
       "activityBar.activeBorder": "#f9826c",
-      "activityBar.border": pick({ light: primer.gray[2], dark: primer.white }),
+      "activityBar.border": pick({ light: colors.gray[2], dark: colors.white }),
 
-      "sideBar.foreground": primer.gray[6],
-      "sideBar.background": pick({ light: primer.gray[1], dark: "#1f2428" }),
-      "sideBar.border": pick({ light: primer.gray[2], dark: primer.white }),
+      "sideBar.foreground": colors.gray[6],
+      "sideBar.background": pick({ light: colors.gray[1], dark: mix(colors.gray[0], "#000", 0.3) }),
+      "sideBar.border": pick({ light: colors.gray[2], dark: colors.white }),
       "sideBarTitle.foreground": workbenchForeground,
       "sideBarSectionHeader.foreground": workbenchForeground,
-      "sideBarSectionHeader.background": pick({ light: primer.gray[1], dark: "#1f2428" }),
-      "sideBarSectionHeader.border": pick({ light: primer.gray[2], dark: primer.white }),
+      "sideBarSectionHeader.background": pick({ light: colors.gray[1], dark: mix(colors.gray[0], "#000", 0.3) }),
+      "sideBarSectionHeader.border": pick({ light: colors.gray[2], dark: colors.white }),
 
       "list.hoverForeground": workbenchForeground,
       "list.inactiveSelectionForeground": workbenchForeground,
       "list.activeSelectionForeground": workbenchForeground,
-      "list.hoverBackground": pick({ light: "#ebf0f4", dark: "#282e34" }),
-      "list.inactiveSelectionBackground": pick({ light: "#e8eaed", dark: "#282e34" }),
-      "list.activeSelectionBackground": pick({ light: "#e2e5e9", dark: "#39414a" }),
-      "list.inactiveFocusBackground": pick({ light: primer.blue[1], dark: "#1d2d3e" }),
-      "list.focusBackground": pick({ light: "#cce5ff", dark: primer.blue[2] }),
+      "list.hoverBackground": mix(colors.gray[1], colors.gray[0], 0.5),
+      "list.inactiveSelectionBackground": mix(colors.gray[1], colors.gray[0], 0.4),
+      "list.activeSelectionBackground": mix(colors.gray[2], colors.gray[1], 0.5),
+      "list.inactiveFocusBackground": pick({ light: colors.blue[1], dark: "#1d2d3e" }),
+      "list.focusBackground": pick({ light: "#cce5ff", dark: colors.blue[2] }),
 
-      "tree.indentGuidesStroke": pick({ light: primer.gray[2], dark: primer.gray[1] }),
+      "tree.indentGuidesStroke": pick({ light: colors.gray[2], dark: colors.gray[0] }),
 
-      "notificationCenterHeader.foreground": primer.gray[5],
-      "notificationCenterHeader.background": pick({ light: primer.gray[2], dark: primer.gray[0] }),
+      "notificationCenterHeader.foreground": colors.gray[5],
+      "notificationCenterHeader.background": pick({ light: colors.gray[2], dark: mix(colors.gray[0], "#000", 0.4) }),
       "notifications.foreground": workbenchForeground,
-      "notifications.background": pick({ light: primer.gray[0], dark: primer.gray[1] }),
-      "notifications.border": pick({ light: primer.gray[2], dark: primer.white }),
-      "notificationsErrorIcon.foreground": primer.red[5],
-      "notificationsWarningIcon.foreground": primer.orange[6],
-      "notificationsInfoIcon.foreground": primer.blue[6],
+      "notifications.background": colors.gray[0],
+      "notifications.border": pick({ light: colors.gray[2], dark: colors.white }),
+      "notificationsErrorIcon.foreground": colors.red[5],
+      "notificationsWarningIcon.foreground": colors.orange[6],
+      "notificationsInfoIcon.foreground": colors.blue[6],
 
-      "pickerGroup.border": primer.gray[2],
+      "pickerGroup.border": pick({ light: colors.gray[2], dark: colors.gray[1] }),
       "pickerGroup.foreground": workbenchForeground,
-      "quickInput.background": primer.gray[0],
+      "quickInput.background": pick({ light: colors.gray[0], dark: mix(colors.gray[0], "#000", 0.4) }),
       "quickInput.foreground": workbenchForeground,
 
-      "statusBar.foreground": primer.gray[6],
-      "statusBar.background": pick({ light: primer.white, dark: primer.gray[0] }),
-      "statusBar.border": pick({ light: primer.gray[2], dark: primer.white }),
-      "statusBar.noFolderBackground": pick({ light: primer.white, dark: primer.gray[0] }),
-      "statusBar.debuggingBackground": auto("#f9826c"),
-      "statusBar.debuggingForeground": pick({ light: primer.white, dark: primer.black }),
-      "statusBarItem.prominentBackground": pick({ light: "#e8eaed", dark: "#282e34" }),
+      "statusBar.foreground": colors.gray[6],
+      "statusBar.background": pick({ light: colors.white, dark: mix(colors.gray[0], "#000", 0.4) }),
+      "statusBar.border": pick({ light: colors.gray[2], dark: colors.white }),
+      "statusBar.noFolderBackground": pick({ light: colors.white, dark: mix(colors.gray[0], "#000", 0.4) }),
+      "statusBar.debuggingBackground": pick({ light: "#f9826c", dark: invert("#f9826c") }),
+      "statusBar.debuggingForeground": pick({ light: colors.white, dark: colors.black }),
+      "statusBarItem.prominentBackground": mix(colors.gray[1], colors.gray[0], 0.4),
 
-      "editorGroupHeader.tabsBackground": pick({ light: primer.gray[1], dark: "#1f2428" }),
-      "editorGroupHeader.tabsBorder": pick({ light: primer.gray[2], dark: primer.white }),
-      "editorGroup.border": pick({ light: primer.gray[2], dark: primer.white }),
+      "editorGroupHeader.tabsBackground": pick({ light: colors.gray[1], dark: mix(colors.gray[0], "#000", 0.3) }),
+      "editorGroupHeader.tabsBorder": pick({ light: colors.gray[2], dark: colors.white }),
+      "editorGroup.border": pick({ light: colors.gray[2], dark: colors.white }),
 
       "tab.activeForeground": workbenchForeground,
-      "tab.inactiveForeground": primer.gray[5],
-      "tab.inactiveBackground": pick({ light: primer.gray[1], dark: "#1f2428" }),
-      "tab.activeBackground": pick({ light: primer.white, dark: primer.gray[0] }),
-      "tab.hoverBackground": pick({ light: primer.white, dark: primer.gray[0] }),
-      "tab.unfocusedHoverBackground": pick({ light: primer.white, dark: primer.gray[0] }),
-      "tab.border": pick({ light: primer.gray[2], dark: primer.white }),
-      "tab.unfocusedActiveBorderTop": pick({ light: primer.gray[2], dark: primer.white }),
-      "tab.activeBorder": pick({ light: primer.white, dark: primer.gray[0] }),
-      "tab.unfocusedActiveBorder": pick({ light: primer.white, dark: primer.gray[0] }),
+      "tab.inactiveForeground": colors.gray[5],
+      "tab.inactiveBackground": pick({ light: colors.gray[1], dark: mix(colors.gray[0], "#000", 0.3) }),
+      "tab.activeBackground": pick({ light: colors.white, dark: mix(colors.gray[0], "#000", 0.4) }),
+      "tab.hoverBackground": pick({ light: colors.white, dark: mix(colors.gray[0], "#000", 0.4) }),
+      "tab.unfocusedHoverBackground": pick({ light: colors.white, dark: mix(colors.gray[0], "#000", 0.4) }),
+      "tab.border": pick({ light: colors.gray[2], dark: colors.white }),
+      "tab.unfocusedActiveBorderTop": pick({ light: colors.gray[2], dark: colors.white }),
+      "tab.activeBorder": pick({ light: colors.white, dark: mix(colors.gray[0], "#000", 0.4) }),
+      "tab.unfocusedActiveBorder": pick({ light: colors.white, dark: mix(colors.gray[0], "#000", 0.4) }),
       "tab.activeBorderTop": "#f9826c",
 
-      "breadcrumb.foreground": primer.gray[5],
+      "breadcrumb.foreground": colors.gray[5],
       "breadcrumb.focusForeground": workbenchForeground,
-      "breadcrumb.activeSelectionForeground": primer.gray[6],
-      "breadcrumbPicker.background": pick({ light: primer.gray[0], dark: "#2b3036" }),
+      "breadcrumb.activeSelectionForeground": colors.gray[6],
+      "breadcrumbPicker.background": colors.gray[0],
 
       "editor.foreground": editorForeground,
-      "editor.background": pick({ light: primer.white, dark: primer.gray[0] }),
-      "editorWidget.background": pick({ light: primer.gray[1], dark: "#1f2428" }),
-      "editor.foldBackground": pick({ light: primer.gray[0], dark: "#282e33" }),
-      "editor.lineHighlightBackground": pick({ light: primer.gray[1], dark: "#2b3036" }),
-      "editorLineNumber.foreground": pick({ light: "#1b1f234d", dark: primer.gray[2] }),
+      "editor.background": pick({ light: colors.white, dark: mix(colors.gray[0], "#000", 0.4) }),
+      "editorWidget.background": pick({ light: colors.gray[1], dark: mix(colors.gray[0], "#000", 0.3) }),
+      "editor.foldBackground": pick({ light: colors.gray[0], dark: colors.gray[0] }),
+      "editor.lineHighlightBorder": pick({ light: colors.gray[1], dark: colors.gray[0] }),
+      "editorLineNumber.foreground": pick({ light: "#1b1f234d", dark: colors.gray[1] }),
       "editorLineNumber.activeForeground": editorForeground,
-      "editorIndentGuide.background": pick({ light: "#eff2f6", dark: primer.gray[1] }),
-      "editorIndentGuide.activeBackground": pick({ light: "#d7dbe0", dark: primer.gray[2] }),
-      "editorWhitespace.foreground": pick({ light: primer.gray[3], dark: primer.gray[2] }),
-      "editorCursor.foreground": primer.blue[7],
+      "editorIndentGuide.background": pick({ light: "#eff2f6", dark: colors.gray[0] }),
+      "editorIndentGuide.activeBackground": pick({ light: "#d7dbe0", dark: colors.gray[1] }),
+      "editorWhitespace.foreground": pick({ light: colors.gray[3], dark: colors.gray[1] }),
+      "editorCursor.foreground": colors.blue[7],
 
-      "editor.findMatchBackground": pick({ light: primer.yellow[4], dark: "#ffd33d44" }),
+      "editor.findMatchBackground": pick({ light: colors.yellow[4], dark: "#ffd33d44" }),
       "editor.findMatchHighlightBackground": pick({ light: "#ffdf5d66", dark: "#ffd33d22" }),
       "editor.inactiveSelectionBackground": pick({ light: "#0366d611", dark: "#3392FF22" }),
       "editor.selectionBackground": pick({ light: "#0366d625", dark: "#3392FF44" }),
       "editor.selectionHighlightBackground": pick({ light: "#34d05840", dark: "#17E5E633" }),
       "editor.selectionHighlightBorder": pick({ light: "#34d05800", dark: "#17E5E600" }),
-      "editor.wordHighlightBackground": pick({ light: "#34d05800", dark: "#17E5E600" }),
-      "editor.wordHighlightStrongBackground": pick({ light: "#34d05800", dark: "#17E5E600" }),
-      "editor.wordHighlightBorder": pick({ light: "#24943e99", dark: "#17E5E699" }),
-      "editor.wordHighlightStrongBorder": pick({ light: "#24943e50", dark: "#17E5E666" }),
+      "editor.wordHighlightBackground": pick({ light: "#34d05822", dark: "#17E5E622" }),
+      "editor.wordHighlightStrongBackground": pick({ light: "#34d05822", dark: "#17E5E622" }),
+      "editor.wordHighlightBorder": pick({ light: "#24943e11", dark: "#17E5E611" }),
+      "editor.wordHighlightStrongBorder": pick({ light: "#24943e11", dark: "#17E5E611" }),
       "editorBracketMatch.background": pick({ light: "#34d05840", dark: "#17E5E650" }),
       "editorBracketMatch.border": pick({ light: "#34d05800", dark: "#17E5E600" }),
 
-      "editorGutter.modifiedBackground": pick({ light: primer.blue[4], dark: primer.blue[5] }),
-      "editorGutter.addedBackground": pick({ light: primer.green[5], dark: primer.green[4] }),
-      "editorGutter.deletedBackground": primer.red[5],
+      "editorGutter.modifiedBackground": pick({ light: colors.blue[4], dark: colors.blue[5] }),
+      "editorGutter.addedBackground": pick({ light: colors.green[5], dark: colors.green[4] }),
+      "editorGutter.deletedBackground": colors.red[5],
 
       "diffEditor.insertedTextBackground": pick({ light: "#34d05822", dark: "#28a74530" }),
       "diffEditor.removedTextBackground": pick({ light: "#d73a4922", dark: "#d73a4930" }),
@@ -163,357 +157,481 @@ function getTheme({ style, name }) {
       "scrollbarSlider.background": pick({ light: "#959da533", dark: "#6a737d33" }),
       "scrollbarSlider.hoverBackground": pick({ light: "#959da544", dark: "#6a737d44" }),
       "scrollbarSlider.activeBackground": pick({ light: "#959da588", dark: "#6a737d88" }),
-      "editorOverviewRuler.border": primer.white,
+      "editorOverviewRuler.border": colors.white,
 
-      "panel.background": pick({ light: primer.gray[1], dark: "#1f2428" }),
-      "panel.border": pick({ light: primer.gray[2], dark: primer.white }),
+      "panel.background": pick({ light: colors.gray[1], dark: mix(colors.gray[0], "#000", 0.3) }),
+      "panel.border": pick({ light: colors.gray[2], dark: colors.white }),
       "panelTitle.activeBorder": "#f9826c",
       "panelTitle.activeForeground": workbenchForeground,
-      "panelTitle.inactiveForeground": primer.gray[5],
-      "panelInput.border": pick({ light: primer.gray[2], dark: primer.gray[1] }),
+      "panelTitle.inactiveForeground": colors.gray[5],
+      "panelInput.border": pick({ light: colors.gray[2], dark: colors.gray[0] }),
 
-      "terminal.foreground": primer.gray[6],
+      "terminal.foreground": colors.gray[6],
 
-      "gitDecoration.addedResourceForeground": primer.green[5],
-      "gitDecoration.modifiedResourceForeground": primer.blue[6],
-      "gitDecoration.deletedResourceForeground": primer.red[5],
-      "gitDecoration.untrackedResourceForeground": primer.green[5],
-      "gitDecoration.ignoredResourceForeground": primer.gray[4],
-      "gitDecoration.conflictingResourceForeground": primer.orange[6],
-      "gitDecoration.submoduleResourceForeground": primer.gray[4],
+      "gitDecoration.addedResourceForeground": colors.green[5],
+      "gitDecoration.modifiedResourceForeground": colors.blue[6],
+      "gitDecoration.deletedResourceForeground": colors.red[5],
+      "gitDecoration.untrackedResourceForeground": colors.green[5],
+      "gitDecoration.ignoredResourceForeground": colors.gray[4],
+      "gitDecoration.conflictingResourceForeground": colors.orange[6],
+      "gitDecoration.submoduleResourceForeground": colors.gray[4],
 
-      "debugToolBar.background": pick({ light: primer.white, dark: "#2b3036" }),
-      "editor.stackFrameHighlightBackground": pick({ light: primer.yellow[1], dark: "#a707" }),
-      "editor.focusedStackFrameHighlightBackground": pick({ light: primer.yellow[2], dark: "#b808" }),
+      "debugToolBar.background": pick({ light: colors.white, dark: mix(colors.gray[1], colors.gray[0], 0.5) }),
+      "editor.stackFrameHighlightBackground": pick({ light: colors.yellow[1], dark: "#a707" }),
+      "editor.focusedStackFrameHighlightBackground": pick({ light: colors.yellow[2], dark: "#b808" }),
 
       "peekViewEditor.matchHighlightBackground": pick({ dark: "#ffd33d33" }),
       "peekViewResult.matchHighlightBackground": pick({ dark: "#ffd33d33" }),
-      "peekViewEditor.background": pick({ dark: "#1f242888" }),
-      "peekViewResult.background": pick({ dark: "#1f2428" }),
+      "peekViewEditor.background": pick({ dark: `${mix(colors.gray[0], "#000", 0.3)}88` }),
+      "peekViewResult.background": pick({ dark: mix(colors.gray[0], "#000", 0.3) }),
 
       "settings.headerForeground": workbenchForeground,
-      "settings.modifiedItemIndicator": primer.blue[4],
-      "welcomePage.buttonBackground": primer.gray[1],
-      "welcomePage.buttonHoverBackground": primer.gray[2],
+      "settings.modifiedItemIndicator": colors.blue[4],
+      "welcomePage.buttonBackground": pick({ light: colors.gray[1], dark: colors.gray[0] }),
+      "welcomePage.buttonHoverBackground": pick({ light: colors.gray[2], dark: colors.gray[1] }),
     },
     semanticHighlighting: true,
     tokenColors: [
       {
         scope: ["comment", "punctuation.definition.comment", "string.comment"],
         settings: {
-          foreground: pick({ light: primer.gray[5], dark: primer.gray[4] }),
+          foreground: pick({ light: colors.gray[4], dark: colors.gray[4] }),
         },
       },
       {
+        name: "parentheses, tuple, brackets of XML/HTML tags",
         scope: [
-          "constant",
+          "punctuation.definition.tag",
+          "punctuation.terminator.statement",
+          "punctuation.definition.parameters",
+          "meta.brace.round",
+        ],
+        settings: {
+          foreground: pick({ light: colors.gray[4], dark: colors.gray[5] }),
+        },
+      },
+      {
+        name: "null, undefined, etc.",
+        scope: "constant.language",
+        settings: {
+          foreground: colors.red[6],
+        },
+      },
+      {
+        name: "this.self",
+        scope: "variable.language",
+        settings: {
+          foreground: colors.red[6],
+        },
+      },
+      {
+        name: "Control flow / Special keywords",
+        scope: [
+          "keyword.control",
+          "source.cpp keyword.operator.new",
+          "keyword.operator.delete",
+          "keyword.other.using",
+          "keyword.other.operator",
+          "entity.name.operator",
+        ],
+        settings: {
+          foreground: pick({
+            light: colors.purple[5],
+            dark: colors.purple[6],
+          }),
+        },
+      },
+      {
+        name: "Keyword",
+        scope: [
+          "keyword",
+          "punctuation.section.embedded.begin.php",
+          "punctuation.section.embedded.end.php",
+          "meta.preprocessor",
+          "entity.name.function.preprocessor",
+          "storage",
+          "storage.type",
+          "storage.modifier",
+        ],
+        settings: {
+          foreground: colors.red[6],
+        },
+      },
+      {
+        name: "Variable, parameter, object keys",
+        scope: [
+          "variable",
+          "support.variable",
+          "entity.name.variable",
+          "meta.definition.variable.name",
+          "entity.other.attribute-name",
+          "meta.object-literal.key",
+          "meta.structure.dictionary.key.python",
+          "support.type.vendored.property-name",
+          "support.type.property-name",
+          "source.coffee.embedded",
+        ],
+        settings: {
+          foreground: colors.blue[7],
+        },
+      },
+      {
+        name: "Constants and enums",
+        scope: [
           "entity.name.constant",
           "variable.other.constant",
-          "variable.language",
+          "variable.other.enummember",
+          "constant.other.database-name",
         ],
         settings: {
-          foreground: primer.blue[6],
+          foreground: colors.blue[6],
         },
       },
       {
-        scope: ["entity", "entity.name"],
-        settings: {
-          foreground: pick({ light: primer.purple[5], dark: primer.purple[6] }),
-        },
-      },
-      {
-        scope: "variable.parameter.function",
-        settings: {
-          foreground: editorForeground,
-        },
-      },
-      {
-        scope: "entity.name.tag",
-        settings: {
-          foreground: primer.green[6],
-        },
-      },
-      {
-        scope: "keyword",
-        settings: {
-          foreground: pick({ light: primer.red[5], dark: primer.red[6] }),
-        },
-      },
-      {
-        scope: ["storage", "storage.type"],
-        settings: {
-          foreground: pick({ light: primer.red[5], dark: primer.red[6] }),
-        },
-      },
-      {
+        name: "Types declaration and references",
         scope: [
-          "storage.modifier.package",
-          "storage.modifier.import",
+          "meta.return-type",
+          "support.class",
+          "support.type",
+          "entity.name.type",
+          "entity.name.namespace",
+          "entity.other.attribute",
+          "entity.name.scope-resolution",
+          "entity.name.class",
+          "storage.type.numeric.go",
+          "storage.type.byte.go",
+          "storage.type.boolean.go",
+          "storage.type.string.go",
+          "storage.type.uintptr.go",
+          "storage.type.error.go",
+          "storage.type.rune.go",
+          "storage.type.cs",
+          "storage.type.generic.cs",
+          "storage.type.modifier.cs",
+          "storage.type.variable.cs",
+          "storage.type.annotation.java",
+          "storage.type.generic.java",
           "storage.type.java",
+          "storage.type.object.array.java",
+          "storage.type.primitive.array.java",
+          "storage.type.primitive.java",
+          "storage.type.token.java",
+          "storage.type.groovy",
+          "storage.type.annotation.groovy",
+          "storage.type.parameters.groovy",
+          "storage.type.generic.groovy",
+          "storage.type.object.array.groovy",
+          "storage.type.primitive.array.groovy",
+          "storage.type.primitive.groovy",
+          "meta.type.cast.expr",
+          "meta.type.new.expr",
+          "support.constant.math",
+          "support.constant.dom",
+          "support.constant.json",
+          "entity.other.inherited-class",
         ],
         settings: {
-          foreground: editorForeground,
+          foreground: colors.green[6],
         },
       },
       {
+        name: "Function declarations",
+        scope: [
+          "entity.name.function",
+          "support.function",
+          "support.constant.handlebars",
+          "source.powershell variable.other.member",
+          "entity.name.operator.custom-literal", // See https://en.cppreference.com/w/cpp/language/user_literal
+        ],
+        settings: {
+          foreground: pick({ light: colors.yellow[9], dark: colors.yellow[7] }),
+        },
+      },
+      {
+        name: "Numeric",
+        scope: [
+          "constant.numeric",
+          "variable.other.enummember",
+          "meta.preprocessor.numeric",
+          "keyword.operator.plus.exponent",
+          "keyword.operator.minus.exponent",
+          "keyword.other.unit",
+        ],
+        settings: {
+          foreground: pick({ light: colors.green[5], dark: colors.green[7] }),
+        },
+      },
+      {
+        name: "String",
         scope: [
           "string",
+          "meta.preprocessor.string",
+          "meta.embedded.assembly",
           "punctuation.definition.string",
           "string punctuation.section.embedded source",
         ],
         settings: {
-          foreground: pick({ light: primer.blue[8], dark: "#9ecbff" }),
+          foreground: colors.orange[6],
         },
       },
       {
-        scope: "support",
+        scope: "constant.character.escape",
         settings: {
-          foreground: primer.blue[6],
+          foreground: colors.yellow[4],
         },
       },
       {
-        scope: "meta.property-name",
+        scope: ["constant.other.placeholder"],
         settings: {
-          foreground: primer.blue[6],
+          foreground: colors.orange[7],
         },
       },
       {
-        scope: "variable",
+        name: "Regexp",
+        scope: [
+          "constant.regexp",
+          "source.regexp",
+          "string.regexp",
+          "constant.character.character-class.regexp",
+          "constant.other.character-class.set.regexp",
+          "constant.other.character-class.regexp",
+          "constant.character.set.regexp",
+          "keyword.operator.quantifier.regexp",
+        ],
         settings: {
-          foreground: primer.orange[6],
+          foreground: colors.orange[5],
         },
       },
       {
-        scope: "variable.other",
+        name: "Regular expression groups",
+        scope: [
+          "punctuation.definition.group.regexp",
+          "punctuation.definition.group.assertion.regexp",
+          "punctuation.definition.character-class.regexp",
+          "punctuation.character.set.begin.regexp",
+          "punctuation.character.set.end.regexp",
+          "keyword.operator.negation.regexp",
+          "support.other.parenthesis.regexp",
+        ],
         settings: {
-          foreground: editorForeground,
+          foreground: colors.orange[6],
         },
       },
       {
-        scope: "invalid.broken",
+        scope: ["keyword.operator.or.regexp", "keyword.control.anchor.regexp"],
+        settings: {
+          foreground: colors.red[7],
+        },
+      },
+      {
+        name: "C/Java character",
+        scope: ["constant.character", "string.quoted.single.cpp", "string.quoted.single.java"],
+        settings: {
+          foreground: colors.red[6],
+        },
+      },
+      {
+        name: "Reset JavaScript string interpolation expression",
+        scope: ["meta.template.expression"],
+        settings: {
+          foreground: colors.gray[7],
+        },
+      },
+      {
+        name: "String interpolation",
+        scope: [
+          "punctuation.definition.template-expression.begin",
+          "punctuation.definition.template-expression.end",
+          "punctuation.section.embedded",
+        ],
+        settings: {
+          foreground: pick({ light: colors.purple[5], dark: colors.purple[6] }),
+        },
+      },
+      {
+        name: "coloring of the Java import and package identifiers",
+        scope: [
+          "storage.modifier.package",
+          "storage.modifier.import",
+          "storage.type.java",
+          "variable.language.wildcard.java",
+        ],
+        settings: {
+          foreground: colors.gray[6],
+        },
+      },
+      {
+        scope: "entity.name.label",
+        settings: {
+          foreground: colors.gray[7],
+        },
+      },
+      {
+        name: "HTML tag",
+        scope: "entity.name.tag",
+        settings: {
+          foreground: colors.red[6],
+        },
+      },
+      {
+        name: "CSS property value",
+        scope: [
+          "support.constant.property-value",
+          "support.constant.font-name",
+          "support.constant.media-type",
+          "support.constant.media",
+          "constant.other.color.rgb-value",
+          "constant.other.rgb-value",
+          "support.constant.color",
+        ],
+        settings: {
+          foreground: colors.orange[6],
+        },
+      },
+      {
+        name: "CSS tag",
+        scope: "entity.name.tag.css",
+        settings: {
+          foreground: pick({ light: colors.yellow[8], dark: colors.yellow[4] }),
+        },
+      },
+      {
+        name: "CSS class/selector",
+        scope: [
+          "entity.other.attribute-name.class.css",
+          "entity.other.attribute-name.class.mixin.css",
+          "entity.other.attribute-name.id.css",
+          "entity.other.attribute-name.parent-selector.css",
+          "entity.other.attribute-name.pseudo-class.css",
+          "entity.other.attribute-name.pseudo-element.css",
+          "source.css.less entity.other.attribute-name.id",
+          "entity.other.attribute-name.scss",
+        ],
+        settings: {
+          foreground: pick({ light: colors.yellow[7], dark: colors.yellow[5] }),
+        },
+      },
+      {
+        scope: ["meta.embedded", "source.groovy.embedded"],
+        settings: {
+          foreground: pick({ light: colors.black, dark: colors.gray[7] }),
+        },
+      },
+      {
+        name: "pre block",
+        scope: ["markup.raw", "markup.fenced_code.block"],
+        settings: {
+          foreground: pick({ light: colors.gray[6], dark: mix(colors.gray[6], colors.gray[5], 0.5) }),
+        },
+      },
+      {
+        scope: "invalid",
+        settings: {
+          foreground: "#ff3333",
+        },
+      },
+      {
+        scope: "markup.underline",
+        settings: {
+          fontStyle: "underline",
+        },
+      },
+      {
+        scope: ["strong", "markup.bold"],
+        settings: {
+          fontStyle: "bold",
+          foreground: pick({ light: "#000", dark: "#fff" }),
+        },
+      },
+      {
+        scope: "markup.heading",
+        settings: {
+          fontStyle: "bold",
+          foreground: colors.blue[6],
+        },
+      },
+      {
+        scope: ["header", "meta.diff.header"],
+        settings: {
+          foreground: colors.blue[6],
+        },
+      },
+      {
+        scope: ["emphasis", "markup.italic"],
         settings: {
           fontStyle: "italic",
-          foreground: primer.red[7],
         },
       },
       {
-        scope: "invalid.deprecated",
+        scope: "markup.inserted",
         settings: {
-          fontStyle: "italic",
-          foreground: primer.red[7],
+          foreground: colors.green[7],
         },
       },
       {
-        scope: "invalid.illegal",
+        scope: "markup.deleted",
         settings: {
-          fontStyle: "italic",
-          foreground: primer.red[7],
+          foreground: colors.orange[6],
         },
       },
       {
-        scope: "invalid.unimplemented",
+        scope: "markup.changed",
         settings: {
-          fontStyle: "italic",
-          foreground: primer.red[7],
+          foreground: colors.blue[6],
+        },
+      },
+      {
+        scope: ["markup.quote", "punctuation.definition.quote.begin.markdown"],
+        settings: {
+          foreground: colors.green[6],
+        },
+      },
+      {
+        scope: "punctuation.definition.list.begin.markdown",
+        settings: {
+          foreground: colors.blue[6],
+        },
+      },
+      {
+        scope: "markup.inline.raw",
+        settings: {
+          foreground: colors.orange[6],
+        },
+      },
+      {
+        scope: ["keyword.operator", "punctuation.accessor"],
+        settings: {
+          foreground: colors.pink[7],
+        },
+      },
+      {
+        scope: "support.function.git-rebase",
+        settings: {
+          foreground: colors.blue[7],
+        },
+      },
+      {
+        scope: "constant.sha.git-rebase",
+        settings: {
+          foreground: colors.green[7],
         },
       },
       {
         scope: "carriage-return",
         settings: {
           fontStyle: "italic underline",
-          background: pick({ light: primer.red[5], dark: primer.red[6] }),
-          foreground: primer.gray[0],
+          background: pick({ light: colors.red[5], dark: colors.red[6] }),
+          foreground: colors.gray[0],
           content: "^M",
         },
       },
-      {
-        scope: "message.error",
-        settings: {
-          foreground: primer.red[7],
-        },
-      },
-      {
-        scope: "string source",
-        settings: {
-          foreground: editorForeground,
-        },
-      },
-      {
-        scope: "string variable",
-        settings: {
-          foreground: primer.blue[6],
-        },
-      },
-      {
-        scope: ["source.regexp", "string.regexp"],
-        settings: {
-          foreground: primer.blue[8],
-        },
-      },
-      {
-        scope: [
-          "string.regexp.character-class",
-          "string.regexp constant.character.escape",
-          "string.regexp source.ruby.embedded",
-          "string.regexp string.regexp.arbitrary-repitition",
-        ],
-        settings: {
-          foreground: primer.blue[8],
-        },
-      },
-      {
-        scope: "string.regexp constant.character.escape",
-        settings: {
-          fontStyle: "bold",
-          foreground: primer.green[6],
-        },
-      },
-      {
-        scope: "support.constant",
-        settings: {
-          foreground: primer.blue[6],
-        },
-      },
-      {
-        scope: "support.variable",
-        settings: {
-          foreground: primer.blue[6],
-        },
-      },
-      {
-        scope: "meta.module-reference",
-        settings: {
-          foreground: primer.blue[6],
-        },
-      },
-      {
-        scope: "punctuation.definition.list.begin.markdown",
-        settings: {
-          foreground: primer.orange[6],
-        },
-      },
-      {
-        scope: ["markup.heading", "markup.heading entity.name"],
-        settings: {
-          fontStyle: "bold",
-          foreground: primer.blue[6],
-        },
-      },
-      {
-        scope: "markup.quote",
-        settings: {
-          foreground: primer.green[6],
-        },
-      },
-      {
-        scope: "markup.italic",
-        settings: {
-          fontStyle: "italic",
-          foreground: editorForeground,
-        },
-      },
-      {
-        scope: "markup.bold",
-        settings: {
-          fontStyle: "bold",
-          foreground: editorForeground,
-        },
-      },
-      {
-        scope: "markup.raw",
-        settings: {
-          foreground: primer.blue[6],
-        },
-      },
-      {
-        scope: [
-          "markup.deleted",
-          "meta.diff.header.from-file",
-          "punctuation.definition.deleted",
-        ],
-        settings: {
-          background: primer.red[0],
-          foreground: primer.red[7],
-        },
-      },
-      {
-        scope: [
-          "markup.inserted",
-          "meta.diff.header.to-file",
-          "punctuation.definition.inserted",
-        ],
-        settings: {
-          background: primer.green[0],
-          foreground: primer.green[6],
-        },
-      },
-      {
-        scope: ["markup.changed", "punctuation.definition.changed"],
-        settings: {
-          background: primer.orange[1],
-          foreground: primer.orange[6],
-        },
-      },
-      {
-        scope: ["markup.ignored", "markup.untracked"],
-        settings: {
-          foreground: primer.gray[1],
-          background: primer.blue[6],
-        },
-      },
-      {
-        scope: "meta.diff.range",
-        settings: {
-          foreground: pick({ light: primer.purple[5], dark: primer.purple[6] }),
-          fontStyle: "bold",
-        },
-      },
-      {
-        scope: "meta.diff.header",
-        settings: {
-          foreground: primer.blue[6],
-        },
-      },
-      {
-        scope: "meta.separator",
-        settings: {
-          fontStyle: "bold",
-          foreground: primer.blue[6],
-        },
-      },
-      {
-        scope: "meta.output",
-        settings: {
-          foreground: primer.blue[6],
-        },
-      },
-      {
-        scope: [
-          "brackethighlighter.tag",
-          "brackethighlighter.curly",
-          "brackethighlighter.round",
-          "brackethighlighter.square",
-          "brackethighlighter.angle",
-          "brackethighlighter.quote",
-        ],
-        settings: {
-          foreground: primer.gray[6],
-        },
-      },
-      {
-        scope: "brackethighlighter.unmatched",
-        settings: {
-          foreground: primer.red[7],
-        },
-      },
-      {
-        scope: ["constant.other.reference.link", "string.other.link"],
-        settings: {
-          foreground: primer.blue[8],
-          fontStyle: "underline",
-        },
-      },
     ],
+    semanticTokenColors: {
+      newOperator: pick({ light: colors.purple[5], dark: colors.purple[6] }),
+      stringLiteral: colors.orange[6],
+      customLiteral: pick({ light: colors.yellow[9], dark: colors.yellow[7] }),
+      numberLiteral: pick({ light: colors.green[5], dark: colors.green[7] }),
+    },
   };
 }
 

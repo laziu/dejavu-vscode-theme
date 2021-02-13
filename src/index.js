@@ -3,12 +3,12 @@ const getTheme = require("./theme");
 
 const lightTheme = getTheme({
   style: "light",
-  name: "GitHub Light",
+  name: "DejaVu Light",
 });
 
 const darkTheme = getTheme({
   style: "dark",
-  name: "GitHub Dark",
+  name: "DejaVu Dark",
 });
 
 fs.mkdir("./themes", { recursive: true })
