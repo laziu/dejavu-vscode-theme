@@ -6,6 +6,7 @@
 	"preview": true,
 	"publisher": "laziu",
 	"license": "MIT",
+	"icon": "icon.png",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/laziu/dejavu-vscode-theme"
