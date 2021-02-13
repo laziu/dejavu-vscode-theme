@@ -1,5 +1,7 @@
 # DejaVu VS Code theme
 
+![DejaVu VS Code theme](https://user-images.githubusercontent.com/5442997/107851695-2a889d00-6e4f-11eb-91a7-3c7dbd40c518.png)
+
 ## Install
 
 1. Go to [VS Marketplace](https://marketplace.visualstudio.com/items?itemName=laziu.dejavu-vscode-theme)
